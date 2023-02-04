@@ -30,6 +30,8 @@ func main() {
 	r.POST("/api/products", controllers.CreateProduct)
 	r.PUT("/api/products/:id", controllers.UpdateProduct)
 	r.DELETE("/api/products/:id", controllers.DeleteProduct)
+	// Menu's
+	r.GET("/api/menus", controllers.GetMenus)
 
 	r.Run()
 

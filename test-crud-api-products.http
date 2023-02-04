@@ -32,3 +32,7 @@ DELETE http://{{host}}/api/products/2 HTTP/1.1
 // Demo Association
 GET http://{{host}}/demo/associations/menuproducts HTTP/1.1
 content-type: application/json
+
+// Get Menus
+GET http://{{host}}/api/menus HTTP/1.1
+content-type: application/json

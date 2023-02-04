@@ -29,4 +29,7 @@ func Migrate() {
 	}
 
 	log.Println("Database Migration Completed...")
+	DB.Model(&entities.Menu{}).Association("Products")
+	DB.Model(&entities.Menu{}).Association("Products").Find(&entities.Product{})
+
 }
