@@ -1,6 +1,7 @@
 package database
 
 import (
+	"fmt"
 	"golang-crud-rest-api/entities"
 	"log"
 
@@ -8,11 +9,11 @@ import (
 	"gorm.io/gorm"
 )
 
-var Instance *gorm.DB
+var DB *gorm.DB
 var err error
 
 func Connect(connectionString string) {
-	Instance, err = gorm.Open(mysql.Open(connectionString), &gorm.Config{})
+	DB, err = gorm.Open(mysql.Open(connectionString), &gorm.Config{})
 	if err != nil {
 		log.Fatal(err)
 		panic("Cannot connect to DB")
@@ -21,6 +22,11 @@ func Connect(connectionString string) {
 }
 
 func Migrate() {
-	Instance.AutoMigrate(&entities.Product{})
+	DB.AutoMigrate(&entities.Menu{}, &entities.Product{})
+	err := DB.Model(&entities.Menu{}).Association("Products")
+	if err != nil {
+		fmt.Println(err)
+	}
+
 	log.Println("Database Migration Completed...")
 }
