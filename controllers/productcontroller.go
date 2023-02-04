@@ -1,21 +1,12 @@
 package controllers
 
 import (
-	"encoding/json"
 	"golang-crud-rest-api/database"
 	"golang-crud-rest-api/entities"
 	"net/http"
 
-	"github.com/gorilla/mux"
+	"github.com/gin-gonic/gin"
 )
-
-func CreateProduct(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	var product entities.Product
-	json.NewDecoder(r.Body).Decode(&product)
-	database.Instance.Create(&product)
-	json.NewEncoder(w).Encode(product)
-}
 
 // Helper
 func checkIfProductExists(productId string) bool {
@@ -27,52 +18,66 @@ func checkIfProductExists(productId string) bool {
 	return true
 }
 
-func GetProductById(w http.ResponseWriter, r *http.Request) {
-	productId := mux.Vars(r)["id"]
+func GetProducts(c *gin.Context) {
+	var products []entities.Product
+	database.Instance.Find(&products)
+	c.JSON(http.StatusOK, products)
+}
+
+func GetProductById(c *gin.Context) {
+	productId := c.Param("id")
 	if checkIfProductExists(productId) == false {
-		json.NewEncoder(w).Encode("Product Not Found!")
+		// Product not found, send error response.
+		c.JSON(http.StatusNotFound, "Product Not Found!")
 		return
 	}
 	// NTS: Create a new empty struct of type entities.Product
 	var product entities.Product
 	// NTS: Store it in that empty struct.
 	database.Instance.First(&product, productId)
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(product)
+	c.JSON(http.StatusOK, product)
 }
 
-func GetProducts(w http.ResponseWriter, r *http.Request) {
-	var products []entities.Product
-	database.Instance.Find(&products)
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(products)
+func CreateProduct(c *gin.Context) {
+	var product entities.Product
+	// NTS: This is an interesting error definition / handling 1-liner.
+	if err := c.BindJSON(&product); err != nil {
+		c.JSON(http.StatusNotAcceptable, "Unable to bind body")
+		return
+	}
+
+	database.Instance.Create(&product)
+	c.JSON(http.StatusOK, product)
 }
 
-func UpdateProduct(w http.ResponseWriter, r *http.Request) {
-	productId := mux.Vars(r)["id"]
+func UpdateProduct(c *gin.Context) {
+	productId := c.Param("id")
 	if checkIfProductExists(productId) == false {
-		json.NewEncoder(w).Encode("Product Not Found!")
+		// Product not found, send error response.
+		c.JSON(http.StatusNotFound, "Product Not Found!")
 		return
 	}
 	var product entities.Product
-	database.Instance.First(&product, productId)
-	// NTS: This just takes in the incoming product and overwrites
-	// what is in the DB. There is no error checking here. Perhaps in the DB?
-	json.NewDecoder(r.Body).Decode(&product)
-	database.Instance.Save(&product)
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(product)
+	var updatedProduct entities.Product
+	database.Instance.First(&product, productId) // Nothing is done with this.
+	if err := c.BindJSON(&updatedProduct); err != nil {
+		c.JSON(http.StatusNotAcceptable, "Unable to bind the updated product.")
+	}
+	database.Instance.Save(&updatedProduct)
+	c.JSON(http.StatusOK, updatedProduct)
 }
 
-func DeleteProduct(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	productId := mux.Vars(r)["id"]
+func DeleteProduct(c *gin.Context) {
+	productId := c.Param("id")
+
 	if checkIfProductExists(productId) == false {
-		json.NewEncoder(w).Encode("Product Not Found!")
+		// Product not found, send error response.
+		c.JSON(http.StatusNotFound, "Product Not Found!")
 		return
 	}
+
 	var product entities.Product
 	database.Instance.Delete(&product, productId)
-	json.NewEncoder(w).Encode("Product Deleted Successfully!")
+	c.JSON(http.StatusOK, gin.H{"message": "Product Deleted Successfully"})
+
 }
