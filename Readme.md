@@ -25,9 +25,21 @@ A learning journey to build a Go REST API for a webapp.
         * [Graceful Shutdowns](https://pkg.go.dev/github.com/gin-gonic/gin#readme-graceful-shutdown-or-restart)
 
 ## 03 Feb 23 - 003-Add-Associations-Relations
-    * Link: https://gorm.io/docs/associations.html#Association-Mode
-    * Goal: Create a relation between Menu -> (has many) -> Products.
-    TODO: 
-        * Wire the API endpoints for menu creation
-        * Constraints
-        * How to delete from DB when there are constraints?
+ * Link: https://gorm.io/docs/associations.html#Association-Mode
+ * Goal: Create a relation between Menu -> (has many) -> Products.
+ TODO: 
+     * Wire the API endpoints for menu creation
+     * Constraints
+     * How to delete from DB when there are constraints?
+     
+     
+## 03 Feb 23 - 003-Add-Associations-Relations
+* Link: https://gorm.io/docs/associations.html#Association-Mode
+* Association exists between Menu and Products (hasMany)
+* DB Seed Script created
+* Make targets added.
+
+
+
+# TODO:
+* Create API endpoints for the CRUD of Menu's.
