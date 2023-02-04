@@ -24,6 +24,7 @@ func main() {
 		})
 	})
 	// Register the actual routes
+	r.GET("/demo/associations/menuproducts", controllers.DemoAssociation)
 	r.GET("/api/products", controllers.GetProducts)
 	r.GET("/api/products/:id", controllers.GetProductById)
 	r.POST("/api/products", controllers.CreateProduct)
@@ -31,4 +32,7 @@ func main() {
 	r.DELETE("/api/products/:id", controllers.DeleteProduct)
 
 	r.Run()
+
+	//Try our database thing.
+
 }

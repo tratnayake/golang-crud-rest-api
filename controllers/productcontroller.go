@@ -11,16 +11,33 @@ import (
 // Helper
 func checkIfProductExists(productId string) bool {
 	var product entities.Product
-	database.Instance.First(&product, productId)
+	database.DB.First(&product, productId)
 	if product.ID == 0 {
 		return false
 	}
 	return true
 }
 
+// Demo's
+func DemoAssociation(c *gin.Context) {
+	menu := entities.Menu{
+		Products: []*entities.Product{
+			{
+				Name:        "Test1",
+				Price:       15,
+				Description: "Test",
+			},
+		},
+	}
+
+	database.DB.Create(&menu)
+	database.DB.Save(&menu)
+	c.JSON(http.StatusOK, menu)
+}
+
 func GetProducts(c *gin.Context) {
 	var products []entities.Product
-	database.Instance.Find(&products)
+	database.DB.Find(&products)
 	c.JSON(http.StatusOK, products)
 }
 
@@ -34,7 +51,7 @@ func GetProductById(c *gin.Context) {
 	// NTS: Create a new empty struct of type entities.Product
 	var product entities.Product
 	// NTS: Store it in that empty struct.
-	database.Instance.First(&product, productId)
+	database.DB.First(&product, productId)
 	c.JSON(http.StatusOK, product)
 }
 
@@ -46,7 +63,7 @@ func CreateProduct(c *gin.Context) {
 		return
 	}
 
-	database.Instance.Create(&product)
+	database.DB.Create(&product)
 	c.JSON(http.StatusOK, product)
 }
 
@@ -59,11 +76,11 @@ func UpdateProduct(c *gin.Context) {
 	}
 	var product entities.Product
 	var updatedProduct entities.Product
-	database.Instance.First(&product, productId) // Nothing is done with this.
+	database.DB.First(&product, productId) // Nothing is done with this.
 	if err := c.BindJSON(&updatedProduct); err != nil {
 		c.JSON(http.StatusNotAcceptable, "Unable to bind the updated product.")
 	}
-	database.Instance.Save(&updatedProduct)
+	database.DB.Save(&updatedProduct)
 	c.JSON(http.StatusOK, updatedProduct)
 }
 
@@ -77,7 +94,7 @@ func DeleteProduct(c *gin.Context) {
 	}
 
 	var product entities.Product
-	database.Instance.Delete(&product, productId)
+	database.DB.Delete(&product, productId)
 	c.JSON(http.StatusOK, gin.H{"message": "Product Deleted Successfully"})
 
 }
