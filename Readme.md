@@ -8,7 +8,7 @@ A learning journey to build a Go REST API for a webapp.
 * `mysql -u root`
 
 
-# Log:
+# Log:testesttest test test
 
 ##  03 Feb 23 -  Tutorial 
 * Link: https://codewithmukesh.com/blog/implementing-crud-in-golang-rest-api/

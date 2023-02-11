@@ -2,7 +2,7 @@ package database
 
 import (
 	"fmt"
-	"golang-crud-rest-api/entities"
+	"golang-crud-rest-api/models"
 	"log"
 
 	"gorm.io/driver/mysql"
@@ -22,14 +22,30 @@ func Connect(connectionString string) {
 }
 
 func Migrate() {
-	DB.AutoMigrate(&entities.Menu{}, &entities.Product{})
-	err := DB.Model(&entities.Menu{}).Association("Products")
+	DB.AutoMigrate(&models.Menu{}, &models.Product{})
+	err := DB.Model(&models.Menu{}).Association("Products")
 	if err != nil {
 		fmt.Println(err)
 	}
 
 	log.Println("Database Migration Completed...")
-	DB.Model(&entities.Menu{}).Association("Products")
-	DB.Model(&entities.Menu{}).Association("Products").Find(&entities.Product{})
-
+	DB.Model(&models.Menu{}).Association("Products")
+	DB.Model(&models.Menu{}).Association("Products").Find(&models.Product{})
+	DB.Model(&models.Menu{}).Association("Products").Append(&models.Product{})
 }
+
+// Start starts the migration process
+// func Start() error {
+// 	m := gormigrate.New(DB, gormigrate.DefaultOptions, []*gormigrate.Migration{
+// 		{
+// 			ID: "initial",
+// 			Migrate: func(tx DB) error {
+// 				return tx.CreateTable(&Article{}, &Tag{}).Error
+// 			},
+// 			Rollback: func(tx DB) error {
+// 				return tx.DropTable(&Article{}, &Tag{}).Error
+// 			},
+// 		},
+// 	})
+// 	return m.Migrate()
+// }

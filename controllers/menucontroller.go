@@ -2,14 +2,14 @@ package controllers
 
 import (
 	"golang-crud-rest-api/database"
-	"golang-crud-rest-api/entities"
+	"golang-crud-rest-api/models"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
-func checkIfMenuExisxts(menuId string) bool {
-	var menu entities.Menu
+func checkIfMenuExists(menuId string) bool {
+	var menu models.Menu
 	database.DB.First(&menu, menuId)
 	if menu.ID == 0 {
 		return false
@@ -18,7 +18,7 @@ func checkIfMenuExisxts(menuId string) bool {
 }
 
 func GetMenus(c *gin.Context) {
-	var menus []entities.Menu
-	database.DB.Find(&menus)
+	var menus []models.Menu
+	database.DB.Model(&models.Menu{}).Preload("Products").Find(&menus)
 	c.JSON(http.StatusOK, menus)
 }

@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"golang-crud-rest-api/database"
-	"golang-crud-rest-api/entities"
+	"golang-crud-rest-api/models"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -10,7 +10,7 @@ import (
 
 // Helper
 func checkIfProductExists(productId string) bool {
-	var product entities.Product
+	var product models.Product
 	database.DB.First(&product, productId)
 	if product.ID == 0 {
 		return false
@@ -20,8 +20,8 @@ func checkIfProductExists(productId string) bool {
 
 // Demo's
 func DemoAssociation(c *gin.Context) {
-	menu := entities.Menu{
-		Products: []*entities.Product{
+	menu := models.Menu{
+		Products: []models.Product{
 			{
 				Name:        "Test1",
 				Price:       15,
@@ -36,7 +36,7 @@ func DemoAssociation(c *gin.Context) {
 }
 
 func GetProducts(c *gin.Context) {
-	var products []entities.Product
+	var products []models.Product
 	database.DB.Find(&products)
 	c.JSON(http.StatusOK, products)
 }
@@ -48,15 +48,15 @@ func GetProductById(c *gin.Context) {
 		c.JSON(http.StatusNotFound, "Product Not Found!")
 		return
 	}
-	// NTS: Create a new empty struct of type entities.Product
-	var product entities.Product
+	// NTS: Create a new empty struct of type models.Product
+	var product models.Product
 	// NTS: Store it in that empty struct.
 	database.DB.First(&product, productId)
 	c.JSON(http.StatusOK, product)
 }
 
 func CreateProduct(c *gin.Context) {
-	var product entities.Product
+	var product models.Product
 	// NTS: This is an interesting error definition / handling 1-liner.
 	if err := c.BindJSON(&product); err != nil {
 		c.JSON(http.StatusNotAcceptable, "Unable to bind body")
@@ -74,8 +74,8 @@ func UpdateProduct(c *gin.Context) {
 		c.JSON(http.StatusNotFound, "Product Not Found!")
 		return
 	}
-	var product entities.Product
-	var updatedProduct entities.Product
+	var product models.Product
+	var updatedProduct models.Product
 	database.DB.First(&product, productId) // Nothing is done with this.
 	if err := c.BindJSON(&updatedProduct); err != nil {
 		c.JSON(http.StatusNotAcceptable, "Unable to bind the updated product.")
@@ -93,7 +93,7 @@ func DeleteProduct(c *gin.Context) {
 		return
 	}
 
-	var product entities.Product
+	var product models.Product
 	database.DB.Delete(&product, productId)
 	c.JSON(http.StatusOK, gin.H{"message": "Product Deleted Successfully"})
 
