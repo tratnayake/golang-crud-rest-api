@@ -21,7 +21,7 @@ func checkIfProductExists(productId string) bool {
 // Demo's
 func DemoAssociation(c *gin.Context) {
 	menu := models.Menu{
-		Products: []models.Product{
+		Products: []*models.Product{
 			{
 				Name:        "Test1",
 				Price:       15,

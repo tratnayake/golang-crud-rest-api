@@ -41,6 +41,4 @@ content-type: application/json
 ```
 
 ## Fix:
-~https://blog.depa.do/post/gorm-gotchas use .Migrate()?~
-* When querying for `GetMenus()`  do a Preload. 
-  * `database.DB.Model(&models.Menu{}).Preload("Products").Find(&menus)` 
+https://blog.depa.do/post/gorm-gotchas use .Migrate()?

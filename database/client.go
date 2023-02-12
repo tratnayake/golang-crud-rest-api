@@ -29,23 +29,7 @@ func Migrate() {
 	}
 
 	log.Println("Database Migration Completed...")
-	DB.Model(&models.Menu{}).Association("Products")
-	DB.Model(&models.Menu{}).Association("Products").Find(&models.Product{})
-	DB.Model(&models.Menu{}).Association("Products").Append(&models.Product{})
-}
+	// DB.Model(&models.Menu{}).Association("Products")
+	// DB.Model(&models.Menu{}).Association("Products").Find(&models.Product{})
 
-// Start starts the migration process
-// func Start() error {
-// 	m := gormigrate.New(DB, gormigrate.DefaultOptions, []*gormigrate.Migration{
-// 		{
-// 			ID: "initial",
-// 			Migrate: func(tx DB) error {
-// 				return tx.CreateTable(&Article{}, &Tag{}).Error
-// 			},
-// 			Rollback: func(tx DB) error {
-// 				return tx.DropTable(&Article{}, &Tag{}).Error
-// 			},
-// 		},
-// 	})
-// 	return m.Migrate()
-// }
+}

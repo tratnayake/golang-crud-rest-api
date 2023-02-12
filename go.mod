@@ -2,13 +2,10 @@ module golang-crud-rest-api
 
 go 1.19
 
-require gopkg.in/gormigrate.v1 v1.6.0
-
 require (
 	github.com/fsnotify/fsnotify v1.6.0 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/gin-gonic/gin v1.8.2 // indirect
-	github.com/go-gormigrate/gormigrate/v2 v2.0.2
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
 	github.com/go-playground/validator/v10 v10.11.2 // indirect
@@ -16,7 +13,6 @@ require (
 	github.com/goccy/go-json v0.10.0 // indirect
 	github.com/gorilla/mux v1.8.0 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
-	github.com/jinzhu/gorm v1.9.2 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect

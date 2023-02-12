@@ -32,6 +32,7 @@ func main() {
 	r.DELETE("/api/products/:id", controllers.DeleteProduct)
 	// Menu's
 	r.GET("/api/menus", controllers.GetMenus)
+	r.POST("api/menus", controllers.CreateMenu)
 
 	r.Run()
 
